@@ -1,4 +1,5 @@
 from api.libs.redprint import Redprint
+from api.models.Reply import Reply
 from api.models.Suggestions import Suggestions
 from api.models.base import db
 
@@ -15,6 +16,11 @@ def suggestion_pub():
 @sug.route('/reply',methods=['POST'])
 def suggestion_reply():
     #todo 回复建议
+
+    with db.auto_commit():
+        reply=Reply()
+    pass
+
     pass
 
 @sug.route('/all',methods=['GET'])

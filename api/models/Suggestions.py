@@ -10,7 +10,7 @@ class Suggestions(Base):
     title=Column(String(50),nullable=False)
     content=Column(String(300),nullable=False)
 
-    sugPubPersonId=Column(BigInteger,ForeignKey('user.userid'))
+    sugPubPersonId=Column(Integer,ForeignKey('user.userid'))
     pubPerson=relationship('User',back_populates='myPubSuggestions')
 
     sugStatus=Column(SmallInteger,default=1)

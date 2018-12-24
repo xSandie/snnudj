@@ -7,9 +7,9 @@ from api.models.base import Base
 
 
 class SignInOrder(Base):
-    id=Column(BigInteger,autoincrement=True,primary_key=True)
+    id=Column(Integer,autoincrement=True,primary_key=True)
 
-    pubPersonId=Column(BigInteger,ForeignKey('user.userid'))
+    pubPersonId=Column(Integer,ForeignKey('user.userid'))
     pubPerson=relationship('User',back_populates='pubSignIns')
 
     pubTime=Column(DateTime)
@@ -22,7 +22,7 @@ class SignInOrder(Base):
     signInStatus=Column(SmallInteger,default=1)
     qrcodeUrl=Column(String(100))#本地的相对路径
 
-    signInPerson=relationship(BigInteger,ForeignKey('signInOrder'))#一对多的一侧
+    signInPerson=relationship('SignInPeople',back_populates='signInOrder')#一对多的一侧
 
     def generate_pubTime(self):
         self.pubTime=datetime.now()#todo 可能有误类型错误

@@ -7,12 +7,12 @@ from api.models.base import Base
 
 
 class SignInPeople(Base):
-    id = Column(BigInteger,autoincrement=True,primary_key=True)
+    id = Column(Integer,autoincrement=True,primary_key=True)
 
-    signInOrderId=Column(BigInteger,ForeignKey('sign_in_order.id'))
+    signInOrderId=Column(Integer,ForeignKey('sign_in_order.id'))
     signInOrder=relationship('SignInOrder',back_populates='signInPerson')
 
-    userId=Column(BigInteger,nullable=False)
+    userId=Column(Integer,nullable=False)
     username = Column(String(20))
     userPhone = Column(String(20), index=True)
 

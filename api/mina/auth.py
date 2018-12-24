@@ -22,6 +22,7 @@ def wx_login():
             with db.auto_commit():
                 user=User()
                 user.wxopenId=userId
+                db.session.add(user)
             return_dict={
                 'userId':user.wxopenId
             }

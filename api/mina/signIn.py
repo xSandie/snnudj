@@ -1,5 +1,6 @@
 from api.libs.redprint import Redprint
 from api.models.SignInOrder import SignInOrder
+from api.models.SignInPeople import SignInPeople
 from api.models.base import db
 
 signIn=Redprint('signIn')
@@ -16,6 +17,8 @@ def pub_signIn():
 @signIn.route('/In',methods=['POST'])
 def sign_In():
     #todo 点击签到
+    with db.auto_commit():
+        people_to_sign=SignInPeople()
     pass
 
 @signIn.route('/pubDetail',methods=['GET'])

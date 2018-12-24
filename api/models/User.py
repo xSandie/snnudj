@@ -1,13 +1,13 @@
 from flask_login import UserMixin
-from sqlalchemy import Column, String, Integer, BigInteger, ForeignKey
+from sqlalchemy import Column, String, Integer, BigInteger, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash
 
 from api.models.base import Base
 
 
-class User(Base,UserMixin):
-    userid=Column(BigInteger,primary_key=True,autoincrement=True)#主键
+class User(UserMixin,Base):
+    userid=Column(Integer,primary_key=True,autoincrement=True)#主键
     username=Column(String(20))
     userPhone=Column(String(20),index=True)
     password_hash=Column(String(128))
@@ -24,6 +24,8 @@ class User(Base,UserMixin):
 
     myPubSuggestions=relationship('Suggestions',back_populates='pubPerson')
 
+    admin=Column(Boolean,default=False)
+
     @property
     def password(self):
         return self.password_hash
@@ -32,7 +34,7 @@ class User(Base,UserMixin):
 
     @password.setter
     def password(self, raw):
-        self._password = generate_password_hash(raw)  # 密码加密
+        self.password_hash = generate_password_hash(raw)  # 密码加密
     # 装饰器装饰后，可以像设置属性一样调用password
 
     def increase_pubCount(self):

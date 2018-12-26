@@ -24,6 +24,8 @@ class User(UserMixin,Base):
 
     myPubSuggestions=relationship('Suggestions',back_populates='pubPerson')
 
+    myReplySuggestions=relationship('Reply',back_populates='replyPerson')
+
     admin=Column(Boolean,default=False)
 
     @property

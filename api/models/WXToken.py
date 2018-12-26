@@ -6,4 +6,4 @@ from api.models.base import Base
 
 class WXToken(Base):
     id=Column(Integer,primary_key=True,autoincrement=True)
-    token=Column(String(200))
+    token=Column(String(1024))

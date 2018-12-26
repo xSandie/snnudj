@@ -16,3 +16,7 @@ class Suggestions(Base):
     sugStatus=Column(SmallInteger,default=1)
 
     reply=relationship('Reply',uselist=False)
+
+    IGNORE=0
+    NOREPLY=1
+    HAVEREPLY=2

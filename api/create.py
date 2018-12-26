@@ -10,17 +10,15 @@ from api.models.User import User
 from api.models.base import db
 from api.web import create_blueprint_web
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object('api.config.setting')
     app.config.from_object('api.config.secure')
     register_blueprints(app)
     db.init_app(app)
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
     login_manager.init_app(app)
-
+    # print(OS_PATH)
     # FlaskCLI(app)
     register_shell_context(app)
     register_commands(app)
@@ -44,8 +42,6 @@ def register_commands(app):
     @app.cli.command('init')
     def init():
         # 创建第一个管理员
-
-
         click.echo("Initializing roles and permissions")
         Roles.init_role()
 
@@ -58,6 +54,14 @@ def register_commands(app):
             admin.admin = True
             admin.roleId=Roles.Administrator
             db.session.add(admin)
+        click.echo("Done")
+
+    @app.cli.command('initdb')
+    def initdb():
+        click.echo("Initializing the database")
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
         click.echo("Done")
 
 

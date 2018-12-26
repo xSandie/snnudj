@@ -17,7 +17,7 @@ class SignInOrder(Base):
     # DateTime datetime.datetime 日期和时间
 
     needtoSignIn=Column(Integer)
-    haveSignIn=Column(Integer)
+    haveSignIn=Column(Integer,default=0)
 
     signInStatus=Column(SmallInteger,default=1)
     qrcodeUrl=Column(String(100))#本地的相对路径
@@ -25,4 +25,4 @@ class SignInOrder(Base):
     signInPerson=relationship('SignInPeople',back_populates='signInOrder')#一对多的一侧
 
     def generate_pubTime(self):
-        self.pubTime=datetime.now()#todo 可能有误类型错误
+        return datetime.now()#todo 可能有误类型错误,这里的应该有闭包不影响

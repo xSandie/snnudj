@@ -10,3 +10,6 @@ class Reply(Base):
 
     suggestionId=Column(Integer,ForeignKey('suggestions.id'))
     suggestion=relationship('Suggestions')
+
+    replyPersonId=Column(Integer,ForeignKey('user.userid'))
+    replyPerson=relationship('User',back_populates='myReplySuggestions')

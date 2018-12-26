@@ -12,7 +12,7 @@ class SignInPeople(Base):
     signInOrderId=Column(Integer,ForeignKey('sign_in_order.id'))
     signInOrder=relationship('SignInOrder',back_populates='signInPerson')
 
-    userId=Column(Integer,nullable=False)
+    userId=Column(Integer,index=True,nullable=False)
     username = Column(String(20))
     userPhone = Column(String(20), index=True)
 

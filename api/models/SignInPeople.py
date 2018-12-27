@@ -20,4 +20,4 @@ class SignInPeople(Base):
     # Time 	datetime.time 	时间
 
     def generate_signInTime(self):
-        self.signInTime=datetime.time(datetime.now())#17:51:30.854656
+        return datetime.time(datetime.now())#17:51:30.854656修改

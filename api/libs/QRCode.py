@@ -9,7 +9,7 @@ from api.models.WXToken import WXToken
 
 
 def get_QRCode(signin_order):
-    url = 'https://api.weixin.qq.com/wxa/getwxacode?access_token={ACCESS_TOKEN}'
+    url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={ACCESS_TOKEN}'
 
     ACCESS_TOKEN = WXToken.query.get(1).token
 
@@ -17,8 +17,7 @@ def get_QRCode(signin_order):
         'ACCESS_TOKEN': ACCESS_TOKEN
     }
     url_fin = url.format(**sent_data)
-    data = {'scene': 'test', 'width': 300,'path':'pages/signIn/signIn',
-            'access_token':ACCESS_TOKEN}
+    data = {'width': 300,'path':'pages/signIn/signIn','scene':str(signin_order.id)}
     headers = {'Content-Type': 'application/json'}  ## headers中添加上content-type这个参数，指定为json格式
     response = requests.post(url=url_fin, headers=headers, data=json.dumps(data))
 

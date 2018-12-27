@@ -86,9 +86,9 @@ def suggestion_all():
                     'sugContent':suggestion.content,
                     'reply':[suggestion.reply.replyPerson.username,suggestion.reply.content]
                 })
-            return jsonify({
-                'suggestions':suggestions_toreturn
-            })
+        return jsonify({
+            'suggestions':suggestions_toreturn
+        })
     else:
         abort(403)
 
@@ -122,8 +122,8 @@ def suggestion_ignorelist():
                 'sugTitle':suggestion.title,
                 'sugContent':suggestion.content
             })
-            return jsonify({
-                'ignoreSug':suggestions_toreturn
-            })
+        return jsonify({
+            'ignoreSug':suggestions_toreturn
+        })
     else:
         abort(403)

@@ -118,15 +118,15 @@ def sign_In():
     with db.auto_commit():
         people_to_sign=SignInPeople()
         people_to_sign.signInOrder=signIn_order
-        people_to_sign.signInOrderId=signIn_Id
-        people_to_sign.userId=user.id
+        people_to_sign.signInOrderId=signIn_order.id#有改动
+        people_to_sign.userId=user.userid
         people_to_sign.username=user.username
         people_to_sign.userPhone=user.userPhone
         people_to_sign.signInTime=people_to_sign.generate_signInTime()
         db.session.add(people_to_sign)
+        signIn_order.haveSignIn += 1
         # 加入已签到人列表
     with db.auto_commit():
-        signIn_order.haveSignIn+=1
         signIn_order.signInPerson.append(people_to_sign)
 
     with db.auto_commit():
@@ -143,7 +143,7 @@ def sign_detail():
 
     signIn_order=SignInOrder.query.get(signIn_id)
     user=User.query.get(userId)
-    all_signIn=compose_signIn_people(signIn_order),
+    all_signIn=list(compose_signIn_people(signIn_order))
     if user.userid==signIn_order.pubPersonId:
         return_dict={
             'signInPeople':all_signIn,
@@ -257,7 +257,7 @@ def compose_signIn_ongoPubAct(orders):
     ongoPubAct_list=[]
     now=datetime.datetime.now()
     for order in orders:
-        urgent = True if order.endTime+datetime.timedelta(minutes=10)>now else False
+        urgent = True if order.endTime < now+datetime.timedelta(minutes=10) else False
         ongoPubAct_list.append({
             'pubTime':str(order.pubTime.strftime("%m-%d %H:%M")),
             'haveSignIn':order.haveSignIn,
@@ -274,7 +274,7 @@ def compose_signIn_finJoinAct(orders,userId):
         finJoinAct_list.append({
             'pubPhoneNum':order.pubPerson.userPhone,
             'pubName':order.pubPerson.username,
-            'signInTotal':order.needtoSignIn,
+            'signInTotal':order.haveSignIn,
             'signInTime':[people.signInTime.strftime("%H:%M")
                           for people in order.signInPerson if people.userId==userId][0],
             'endTime':str(order.endTime.strftime("%m-%d %H:%M")),

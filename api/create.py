@@ -25,6 +25,7 @@ def create_app():
     # app.cli.add_command(app)
 
 
+
     return app
 
 def register_blueprints(app):

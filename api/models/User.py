@@ -1,7 +1,8 @@
 from flask_login import UserMixin
+from flask_login._compat import text_type
 from sqlalchemy import Column, String, Integer, BigInteger, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from api.models.base import Base
 
@@ -39,8 +40,17 @@ class User(UserMixin,Base):
         self.password_hash = generate_password_hash(raw)  # 密码加密
     # 装饰器装饰后，可以像设置属性一样调用password
 
+    def validate_password(self,password):
+        return check_password_hash(self.password,password)
+
     def increase_pubCount(self):
         self.pubCount+=1
 
     def increase_signInCount(self):
         self.signInCount+=1
+
+    def get_id(self):
+        try:
+            return text_type(self.userid)
+        except AttributeError:
+            raise NotImplementedError('`get_id`error')

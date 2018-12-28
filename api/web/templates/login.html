@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理员登陆</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script>$(document).ready(function(){
+        // 页面加载完成就执行
+        $("#hint").hide();
+        console.log('执行默认操作');
+        $("#login").click(function(e) {
+            e.preventDefault();
+            // 阻止表单默认提交
+            // alert($("form").serialize());
+            let account = $("#usr").val();
+            let password = $("#pwd").val();
+            let sendData={
+                'account':account,
+                'password':password
+            };
+            console.log(sendData);
+             $.ajax({
+        type: "POST",
+        url: "{{ url_for('web.web_login') }}",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(sendData),
+        dataType: "json",
+        success: function (message) {
+            console.log(message)
+        },
+        error: function (message) {
+            console.log(message)
+        }
+    });
+        });
+    });</script>
+    <style>
+        body {
+            background: #f5f8fd;
+            color: rgba(39, 39, 39, 0.9)
+        }
+        
+        .innerForm {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .formArea {
+            height: 400px;
+            box-sizing: border-box;
+            margin: 100px 20px 50px;
+            padding: 30px;
+            width: 100%;
+            border-radius: 10px;
+            background: white;
+            box-shadow: #DADEE2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logoImg {
+            max-height: 50px;
+            margin-bottom: 30px;
+        }
+        
+        .btnBar {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="innerForm">
+
+                    <div class="formArea">
+
+                        <img class="logoImg" src="{{ url_for('web.static',filename='logo.png') }}">
+
+                        <form>
+                            <div id='hint' class="alert alert-danger">
+                                <strong>登陆失败!</strong> 请检查账号密码。
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">手机号</span>
+                                </div>
+                                <input type="text" class="form-control" id="usr" placeholder="Username">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">密码</span>
+                                </div>
+                                <input type="password" class="form-control" id="pwd" placeholder="password">
+                            </div>
+
+                            <button id="login" type="submit" class="btn btn-danger btnBar">登陆</button>
+                            <div style="margin-top:20px;width:100%;display:flex;justify-content:center;">
+                                <a class="text-center text-danger " href="articleList.html">
+                                    返回主页</a>
+                            </div>
+
+                        </form>
+
+
+                    </div>
+                    <br>
+                    <br>
+                    <p class="text-center small text-muted">陕西师范大学 · <a style="display:inline" class="text-danger" href="http://www.wyxy.snnu.edu.cn/">外国语学院</a> 版权所有</p>
+                    <p class="text-center small text-muted">联系开发者：<a style="display:inline" class="text-danger" href="mailto:sandiexiang@foxmail.com">sandiexiang@foxmail.com</a></p>
+                    <br><br>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+    </div>
+</body>
+
+
+</html>

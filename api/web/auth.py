@@ -1,9 +1,10 @@
 from flask import request, make_response, redirect, url_for, render_template
-from flask_login import login_user
+from flask_login import login_user, current_user, login_required, logout_user
 
 from api.libs.redprint import Redprint
 #todo 用户登录注销，与修改自己账号密码逻辑
 from api.models.User import User
+from api.models.base import db
 
 auth=Redprint('auth')
 
@@ -13,31 +14,51 @@ def login_index():
 
 @auth.route('/login',methods=['POST'])
 def web_login():
-    #todo 网页的登录
+    # 网页的登录
     req_args=request.json
     password=str(req_args.get('password'))
     account=str(req_args.get('account'))
 
     user=User.query.filter_by(userPhone=account).first()
-    if user.admin and user.validate_password(password):
-        login_user(user)
-        redirect(url_for('web.list_article'))
-    else:
+    try:
+        if user.admin and user.validate_password(password):
+            login_user(user,remember=True)
+            response = make_response('ok')
+
+        else:
+            response = make_response('error')
+            # 以下为打开跨站响应的代码
+            response.headers['Access-Control-Allow-Origin'] = '*'
+    except Exception as e:
         response = make_response('error')
         # 以下为打开跨站响应的代码
         response.headers['Access-Control-Allow-Origin'] = '*'
-        return response
+
+    return response
 
 
 
-
-
-@auth.route('/logout',methods=['POST'])
-def web_register():
+@auth.route('/logout',methods=['GET'])
+@login_required
+def web_logout():
     #todo 网页的注销
-    pass
+    logout_user()
+    return redirect(url_for('web.list_article'))
 
 @auth.route('/change',methods=['POST'])
-def web_changeuser():
-    #todo 修改自己帐号密码逻辑
-    pass
+@login_required
+def web_changemyinfo():
+    # 修改自己帐号密码逻辑
+    req_args=request.json
+    user_phone=req_args.get('userPhone')
+    user_name=req_args.get('userName')
+    new_password=req_args.get('userPassword')
+
+    user_id=current_user.userid
+    admin=User.query.get(user_id)
+
+    with db.auto_commit():
+        admin.password=new_password
+        admin.userPhone=user_phone
+        admin.username=user_name
+    return 'ok'

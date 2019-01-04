@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理员面板</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f5f8fd;
+            color: rgba(39, 39, 39, 0.9)
+        }
+        
+        .container {
+            margin-top: 80px;
+        }
+        
+        .logoImg {
+            opacity: 0.8;
+            height: 30px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .card {
+            margin-bottom: 10px;
+        }
+        
+        .navbar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .btnArea {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top">
+        <a class="navbar-brand" href='articleList.html'><img class="logoImg" src="{{ url_for('web.static',filename='logo.png') }}" alt=""></a>
+        <div style="display:flex;"><a class="nav-link text-danger" href="{{ url_for('web.edit_article') }}">发布</a>
+            <a class="nav-link text-danger" href="{{ url_for('web.web_logout') }}">注销</a></div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <h1 class="font-weight-bold">您好，{{ admin.username }}!
+                    {% if admin.roleId == 3%}
+                    <span class="badge badge-success">超级管理员</span>
+                    {% endif %}
+                    {% if admin.roleId == 2 %}
+                        <span class="badge badge-success">管理员</span>
+                    {% endif %}
+                </h1>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <!-- 我的基本信息 -->
+                <!-- 姓名：向书晗
+                手机号：18349250473
+                权限：顶级管理员 修改按钮 放弃管理员权限 -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title font-weight-bold">基本信息</h4>
+                        <form>
+                            <div class="alert alert-danger " id="failhint">
+                                <strong>不可放弃!</strong>
+                            </div>
+                            <!-- <div class="form-group">
+                                    <label for="usr">用户名:</label>
+                                    <input type="text" class="form-control" id="usr">
+                                </div> -->
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">姓名</span>
+                                </div>
+                                <input type="text" class="form-control" id="myName" placeholder="{{ admin.username }}">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">手机号</span>
+                                </div>
+                                <input class="form-control" id="myPhone" placeholder="{{ admin.userPhone }}">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">密码</span>
+                                </div>
+                                <input class="form-control" id="myPassword" placeholder="********">
+                            </div>
+                            <!-- <div class="form-group">
+                                    <label for="pwd">密码:</label>
+                                    <input type="password" class="form-control" id="pwd">
+                                </div> -->
+
+                            <div class="btnArea"><a class="btn btn-danger text-white" id="changeInfo">修改</a>
+                                {% if admin.roleId!=3 %}
+                                <button type="button" class="btn btn-light" id='abandon'>放弃管理</button>
+                                {% endif %}
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title font-weight-bold">创建管理员</h4>
+                        <form>
+                            <div class="alert alert-success" id="successhint">
+                                <strong>创建成功!</strong><a class="text-success" href="{{ url_for('web.see_all_admin') }}">点击刷新</a>
+                            </div>
+                            <!-- <div class="form-group">
+                                    <label for="usr">用户名:</label>
+                                    <input type="text" class="form-control" id="usr">
+                                </div> -->
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">姓名</span>
+                                </div>
+                                <input type="text" class="form-control" id="newName" placeholder="向书晗">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">手机号</span>
+                                </div>
+                                <input class="form-control" id="newPhone" placeholder="18349250473">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">密码</span>
+                                </div>
+                                <input class="form-control" id="newPassword" placeholder="********">
+                            </div>
+                            <!-- <div class="form-group">
+                                    <label for="pwd">密码:</label>
+                                    <input type="password" class="form-control" id="pwd">
+                                </div> -->
+
+                            <div class="btnArea"><a class="btn btn-danger text-white" id="createAdmin">确认创建</a>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- 其他管理员基本信息 -->
+                {% for user in users %}
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title font-weight-bold">管理员：{{ user.username }}</h4>
+                        <p class="card-text">手机号：{{ user.userPhone }} <span class="badge badge-secondary">生效时间:{{ user.create_time | int_to_datetime }}</span></p>
+                        <div class="btnArea"><a data-toggle="modal" data-target="#myModal" class="btn btn-danger text-white">修改</a>
+                            <button type="button" class="btn btn-light deleteAdmin" value="{{ user.userPhone }}" >删除管理员</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <br>
+                <p class="text-center small text-muted">陕西师范大学 · <a style="display:inline" class="text-danger" href="http://www.wyxy.snnu.edu.cn/">外国语学院</a> 版权所有</p>
+                <p class="text-center small text-muted">联系开发者：<a style="display:inline" class="text-danger" href="mailto:sandiexiang@foxmail.com">sandiexiang@foxmail.com</a></p>
+                <br><br>
+            </div>
+            <div class="col-md-1"></div>
+
+        </div>
+        {#模态弹窗#}
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">管理员:张筠瑶</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <form>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">姓名</span>
+                                </div>
+                                <input type="text" class="form-control" id="usrname" placeholder="张筠瑶">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">手机号</span>
+                                </div>
+                                <input class="form-control" id="account" placeholder="18349250473">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">密码</span>
+                                </div>
+                                <input class="form-control" id="password" placeholder="********">
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">修改</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#failhint').hide();
+            $('#successhint').hide();
+            $('#abandon').click(function () {
+                if (confirm("确定放弃？")){
+                    {#放弃管理员权限#}
+                    $.ajax({
+        type: "POST",
+        url: "{{ url_for('web.giveup_admin') }}",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({}),
+        {#dataType: "html",#}
+        success: function (message) {
+            console.log(message);
+            if(message=='ok'){
+                {#放弃成功，登出#}
+                $.get(
+                    url_for('web.web_logout'),function(result){
+                    $(window).attr('location', "{{ url_for('web.list_article') }}");
+                  }
+                );
+            }else $('#failhint').show();
+        },
+        error: function (message) {
+            console.log('失败');
+            console.log(message)
+        }
+    });
+                }
+            });
+            $('#changeInfo').click(function () {
+                {#更改自己的信息#}
+                var userName=$('#myName').val();
+                var userPhone=$('#myPhone').val();
+                var userPassword=$('#myPassword').val();
+                if (userPassword==''){alert('请填写新密码！');return;}
+                if(userPhone==''){userPhone={{ admin.userPhone }};
+                }
+                if (userName==''){userName={{ admin.username }};
+                }
+                var sendData={
+                  'userName':userName,
+                  'userPhone':userPhone,
+                  'userPassword':userPassword
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('web.web_changemyinfo') }}",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(sendData),
+                    success: function (message) {
+                        console.log(message);
+                        if(message=='ok')window.location.reload();else alert('修改失败，请重试！');
+                    },
+                    error: function (message) {
+                        alert('修改失败，请重试！');
+                        console.log('失败');
+                        console.log(message)
+                    }
+                });
+            });
+            $('#createAdmin').click(function () {
+                var userName=$('#newName').val();
+                var userPhone=$('#newPhone').val();
+                var userPassword=$('#newPassword').val();
+                if (userPhone==''){alert('至少填写手机号！');return;}
+                {#密码可不填，默认1-8#}
+                var sendData={
+                    'userPhone':userPhone,
+                    'userName':userName,
+                    'userPassword':userPassword
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('web.create_admin') }}",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(sendData),
+                    success: function (message) {
+                        console.log(message);
+                        if(message=='ok')window.location.reload();else alert('创建失败，请重试！');
+                    },
+                    error: function (message) {
+                        alert('创建失败，请重试！');
+                        console.log('失败');
+                        console.log(message)
+                    }
+                });
+
+            });
+            $('.deleteAdmin').click(function () {
+                {#删除管理员#}
+                if (confirm('确认删除管理员？（不会删除用户）')){
+                    var phoneNumb=$(this).attr('value');
+                    var sendData={
+                      'userPhone':phoneNumb
+                    };
+                    $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('web.delete_admin') }}",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(sendData),
+                    success: function (message) {
+                        console.log(message);
+                        if(message=='ok')window.location.reload();else alert('失败，请重试！');
+                    },
+                    error: function (message) {
+                        alert('失败，请重试！');
+                        console.log('失败');
+                        console.log(message)
+                    }
+                });
+                }
+            })
+
+        })
+    </script>
+</body>
+
+
+</html>

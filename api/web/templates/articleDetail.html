@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ post.title }}</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f5f8fd;
+            color: rgba(39, 39, 39, 0.9)
+        }
+        
+        .logo {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        
+        .logoImg {
+            opacity: 0.8;
+            height: 40px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        
+        span {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <ol class="breadcrumb ">
+                    <li class="breadcrumb-item"><a class="text-danger" href="{{ url_for('web.list_article') }}">首页</a></li>
+                    <li class="breadcrumb-item active">{{ post.title }}</li>
+                </ol>
+                <br>
+                <h1 class="text-danger font-weight-bold">{{ post.title }}</h1>
+                <p></p>
+                <span class="badge badge-secondary small">发布人：{{ post.pubPerson.username }}</span><span class="badge badge-secondary small">{{ post.time }}</span>
+                <p id='contentBegin'></p>
+                {{ post.body|safe }}
+                <br>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <div class="logo"><img class="logoImg" src="{{ url_for('web.static',filename='logo.png') }}"></div>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <br>
+                <p class="text-center small text-muted">陕西师范大学 · <a style="display:inline" class="text-danger" href="http://www.wyxy.snnu.edu.cn/">外国语学院</a> 版权所有</p>
+                <p class="text-center small text-muted">联系开发者：<a style="display:inline" class="text-danger" href="mailto:sandiexiang@foxmail.com">sandiexiang@foxmail.com</a></p>
+                <br><br>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>

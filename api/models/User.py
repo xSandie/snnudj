@@ -4,6 +4,7 @@ from sqlalchemy import Column, String, Integer, BigInteger, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from api.models.Permission import Permission
 from api.models.base import Base
 
 
@@ -27,6 +28,7 @@ class User(UserMixin,Base):
 
     myReplySuggestions=relationship('Reply',back_populates='replyPerson')
 
+    posts=relationship('Post',back_populates='pubPerson')
     admin=Column(Boolean,default=False)
 
     @property
@@ -50,7 +52,14 @@ class User(UserMixin,Base):
         self.signInCount+=1
 
     def get_id(self):
+        #覆盖父类的id
         try:
             return text_type(self.userid)
         except AttributeError:
             raise NotImplementedError('`get_id`error')
+
+    def can(self,permission_name):
+        #判断是否有权限
+        permission=Permission.query.filter_by(name=permission_name).first()
+        return permission is not None and self.role is not None and \
+            permission in self.role.permission

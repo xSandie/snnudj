@@ -24,18 +24,23 @@
                 'account':account,
                 'password':password
             };
-            console.log(sendData);
              $.ajax({
         type: "POST",
         url: "{{ url_for('web.web_login') }}",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(sendData),
-        dataType: "json",
+        {#dataType: "json",#}
         success: function (message) {
-            console.log(message)
-        },
+            console.log(message);
+            if (message=='ok'){
+                $(window).attr('location', "{{ url_for('web.list_article') }}");
+                {#,_external=True#}
+                console.log('enter ok')
+        }if (message=='error'){
+                $('#hint').show();
+            }},
         error: function (message) {
-            console.log(message)
+            {#console.log(message)#}
         }
     });
         });
@@ -112,7 +117,7 @@
 
                             <button id="login" type="submit" class="btn btn-danger btnBar">登陆</button>
                             <div style="margin-top:20px;width:100%;display:flex;justify-content:center;">
-                                <a class="text-center text-danger " href="articleList.html">
+                                <a class="text-center text-danger " href="{{ url_for('web.list_article') }}">
                                     返回主页</a>
                             </div>
 

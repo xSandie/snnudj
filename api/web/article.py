@@ -1,4 +1,4 @@
-#todo 文章相关发布 删除 查看详情 查看列表
+# 文章相关发布 删除 查看详情 查看列表
 from flask import make_response, render_template, request, session
 from flask_login import current_user, login_required
 

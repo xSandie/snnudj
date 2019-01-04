@@ -13,7 +13,7 @@ from api.models.base import db
 
 signIn=Redprint('signIn')
 
-#todo 创建 查看 和 签到
+# 创建 查看 和 签到
 @signIn.route('/finlist',methods=['GET'])
 def fin_signIn_list():
     #获取已完成签到

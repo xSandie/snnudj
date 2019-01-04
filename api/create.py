@@ -42,7 +42,7 @@ def register_shell_context(app):
 
 
 def register_commands(app):
-    @app.cli.command('init')
+    @app.cli.command('initAdmin')
     def init():
         # 创建第一个管理员
         click.echo("Initializing roles and permissions")
@@ -56,6 +56,17 @@ def register_commands(app):
             admin.password = 'Mzp12345678'
             admin.admin = True
             admin.roleId=Roles.Administrator
+            db.session.add(admin)
+        click.echo("Done")
+
+        click.echo("Initializing the first moderator")
+        with db.auto_commit():
+            admin = User()
+            admin.username = '张筠瑶'
+            admin.userPhone = '15594989021'
+            admin.password = '12345678'
+            admin.admin = True
+            admin.roleId = Roles.Moderator
             db.session.add(admin)
         click.echo("Done")
 
@@ -83,18 +94,6 @@ def register_commands(app):
         db.session.commit()
         click.echo('Done')
 
-    @app.cli.command('initMod')
-    def init_mod():
-        click.echo("Initializing the first moderator")
-        with db.auto_commit():
-            admin = User()
-            admin.username = '张筠瑶'
-            admin.userPhone = '15594989021'
-            admin.password = '12345678'
-            admin.admin = True
-            admin.roleId = Roles.Moderator
-            db.session.add(admin)
-        click.echo("Done")
 
 
 def int_to_datetime(day_int):

@@ -62,4 +62,4 @@ class User(UserMixin,Base):
         #判断是否有权限
         permission=Permission.query.filter_by(name=permission_name).first()
         return permission is not None and self.role is not None and \
-            permission in self.role.permission
+            permission in self.role.permissions

@@ -25,4 +25,4 @@ class SignInOrder(Base):
     signInPerson=relationship('SignInPeople',back_populates='signInOrder')#一对多的一侧
 
     def generate_pubTime(self):
-        return datetime.now()#todo 可能有误类型错误,这里的应该有闭包不影响
+        return datetime.now()# 可能有误类型错误,这里的应该有闭包不影响

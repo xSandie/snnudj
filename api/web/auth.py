@@ -2,7 +2,7 @@ from flask import request, make_response, redirect, url_for, render_template
 from flask_login import login_user, current_user, login_required, logout_user
 
 from api.libs.redprint import Redprint
-#todo 用户登录注销，与修改自己账号密码逻辑
+# 用户登录注销，与修改自己账号密码逻辑
 from api.models.User import User
 from api.models.base import db
 
@@ -41,7 +41,7 @@ def web_login():
 @auth.route('/logout',methods=['GET'])
 @login_required
 def web_logout():
-    #todo 网页的注销
+    # 网页的注销
     logout_user()
     return redirect(url_for('web.list_article'))
 

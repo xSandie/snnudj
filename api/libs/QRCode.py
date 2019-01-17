@@ -17,7 +17,7 @@ def get_QRCode(signin_order):
         'ACCESS_TOKEN': ACCESS_TOKEN
     }
     url_fin = url.format(**sent_data)
-    data = {'width': 300,'page':'pages/signIn/signIn','scene':str(signin_order.id)}
+    data = {'width': 300,'path':'pages/signIn/signIn','scene':str(signin_order.id)}
     headers = {'Content-Type': 'application/json'}  ## headers中添加上content-type这个参数，指定为json格式
     response = requests.post(url=url_fin, headers=headers, data=json.dumps(data))
 

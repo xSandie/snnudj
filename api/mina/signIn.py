@@ -114,25 +114,25 @@ def sign_In():
 
     signIn_order=SignInOrder.query.get(signIn_Id)
     user=User.query.get(userId)
+    if signIn_order.signInStatus==1:
+        with db.auto_commit():
+            people_to_sign=SignInPeople()
+            people_to_sign.signInOrder=signIn_order
+            people_to_sign.signInOrderId=signIn_order.id#有改动
+            people_to_sign.userId=user.userid
+            people_to_sign.username=user.username
+            people_to_sign.userPhone=user.userPhone
+            people_to_sign.signInTime=people_to_sign.generate_signInTime()
+            db.session.add(people_to_sign)
+            signIn_order.haveSignIn += 1
+            # 加入已签到人列表
+        with db.auto_commit():
+            signIn_order.signInPerson.append(people_to_sign)
 
-    with db.auto_commit():
-        people_to_sign=SignInPeople()
-        people_to_sign.signInOrder=signIn_order
-        people_to_sign.signInOrderId=signIn_order.id#有改动
-        people_to_sign.userId=user.userid
-        people_to_sign.username=user.username
-        people_to_sign.userPhone=user.userPhone
-        people_to_sign.signInTime=people_to_sign.generate_signInTime()
-        db.session.add(people_to_sign)
-        signIn_order.haveSignIn += 1
-        # 加入已签到人列表
-    with db.auto_commit():
-        signIn_order.signInPerson.append(people_to_sign)
+        with db.auto_commit():
+            user.increase_signInCount()
 
-    with db.auto_commit():
-        user.increase_signInCount()
-
-    return jsonify({'status':'ok'})
+        return jsonify({'status':'ok'})
 
 @signIn.route('/pubDetail',methods=['GET'])
 def sign_detail():
@@ -220,12 +220,14 @@ def get_signIn_detail():
     signIn_order = SignInOrder.query.get(signIn_Id)
     if userId!=signIn_order.pubPersonId:
         can_SignIn=True if SignInPeople.query.filter_by(userId=userId,signInOrderId=signIn_Id).first() is None else False
+        user=User.query.get(userId)
         return_dict={
             'pubuserPhone':signIn_order.pubPerson.userPhone,
             'pubuserName':signIn_order.pubPerson.username,
             'endTime':str(signIn_order.endTime.strftime("%Y-%m-%d %H:%M")),
             'signInNum':signIn_order.haveSignIn,
-            'canSignIn':can_SignIn
+            'canSignIn':can_SignIn,
+            'myName':user.username
         }
     else:
         abort(403)

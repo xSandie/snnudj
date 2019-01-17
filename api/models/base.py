@@ -15,14 +15,14 @@ class SQLAlchemy(_SQLAlchemy):
             self.session.commit()
         except Exception as e:
             self.session.rollback()
-            print('database Error')
+            # print('database Error')
             raise e
 
 db = SQLAlchemy()  # 实例化,用来映射到数据库中,要和核心对象app绑定起来,现在是实例化自己的sqlachemy
 # 定义一个基类
 class Base(db.Model):#这样使子模型直接继承此base就行
     __abstract__=True#默认会直接创建这个表，但是我们不希望创建
-    create_time=Column('create_time',Integer)
+    create_time=db.Column('create_time',Integer)
 
     def __init__(self):
         self.create_time=int(datetime.now().timestamp())#模型生成的时间

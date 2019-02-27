@@ -1,11 +1,10 @@
 from flask_login import UserMixin
 from flask_login._compat import text_type
 from sqlalchemy import Column, String, Integer, BigInteger, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from api.models.Permission import Permission
-from api.models.base import Base
+from api.models.base import Base, db
 
 
 class User(UserMixin,Base):
@@ -16,20 +15,24 @@ class User(UserMixin,Base):
 
     wxopenId=Column(String(100),index=True,nullable=True)
 
-    roleId=Column(Integer,ForeignKey('roles.id'))
-    role=relationship('Roles',back_populates='users')
+    roleId=Column(Integer,db.ForeignKey('roles.id'))
+    role=db.relationship('Roles',back_populates='users')
 
     pubCount=Column(Integer,default=0)
     signInCount=Column(Integer,default=0)
 
-    pubSignIns=relationship('SignInOrder',back_populates='pubPerson')
+    pubSignIns=db.relationship('SignInOrder',back_populates='pubPerson')
 
-    myPubSuggestions=relationship('Suggestions',back_populates='pubPerson')
+    myPubSuggestions=db.relationship('Suggestions',back_populates='pubPerson')
 
-    myReplySuggestions=relationship('Reply',back_populates='replyPerson')
+    myReplySuggestions=db.relationship('Reply',back_populates='replyPerson')
 
-    posts=relationship('Post',back_populates='pubPerson')
+    posts=db.relationship('Post',back_populates='pubPerson')
     admin=Column(Boolean,default=False)
+
+    canPub = db.Column(db.Boolean, default=False, nullable=False)#可以发布签到
+    canEdit = db.Column(db.Boolean, default=False, nullable=False)#可以发布文章
+
 
     @property
     def password(self):

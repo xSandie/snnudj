@@ -1,7 +1,7 @@
 import click
 from faker import Faker
 from flask import Flask
-
+from flask_migrate import Migrate
 
 from api.libs.Login import login_manager
 from api.mina import create_blueprint_mina
@@ -14,15 +14,21 @@ from api.web import create_blueprint_web
 
 
 def create_app():
+
     app = Flask(__name__,static_folder='../static')
+    # babel = Babel(app)
     app.config.from_object('api.config.setting')
     app.config.from_object('api.config.secure')
     register_blueprints(app)
     db.init_app(app)
     login_manager.init_app(app)
-
+    migrate = Migrate(app, db)
     register_shell_context(app)
     register_commands(app)
+    #要放在db.init之后，不然会提示：sqlalchemy.exc.InvalidRequestError: When initializing mapper Mapper|Suggestions|suggestions, expression 'Reply' failed to locate a name ("name
+    # 'Reply' is not defined"). If this is a class name, consider adding this relationship() to the <class 'api.models.Suggestions.Suggestions'> ass after both dependent classes have been defined.
+    # from api.admin import admin
+    # admin.init_app(app)
 
     #向jinjia注册自定义函数
     env = app.jinja_env
@@ -52,7 +58,7 @@ def register_commands(app):
         with db.auto_commit():
             admin = User()
             admin.username = '马正平'
-            admin.userPhone = '18349250473'
+            admin.userPhone = '13572856767'
             admin.password = 'Mzp12345678'
             admin.admin = True
             admin.roleId=Roles.Administrator

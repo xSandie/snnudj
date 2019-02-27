@@ -27,7 +27,7 @@ def wx_login():
                 user.wxopenId=openId
                 db.session.add(user)
             return_dict={
-                'openId':user.wxopenId,
+                # 'openId':user.wxopenId,
                 'userId':user.userid
             }
         else:
@@ -36,14 +36,15 @@ def wx_login():
             tomorrow = today + datetime.timedelta(days=1)
             endday=today+datetime.timedelta(days=60)
             return_dict={
-                'openId':user.wxopenId,
+                # 'openId':user.wxopenId,
                 'userId':user.userid,
                 'admin':user.admin,
                 'username':user.username if user.username else '',
                 'userPhone':user.userPhone if user.userPhone else False,
                 'date':str(tomorrow.date()),
                 'startDate':str(today.date()),
-                'endDate':str(endday.date())
+                'endDate':str(endday.date()),
+                'canPub':user.canPub
             }
     else:
         abort(404)

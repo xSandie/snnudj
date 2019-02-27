@@ -21,7 +21,7 @@
                 var title=$('#articleTitle').val();
                 if (title==''){
                     $('#hint').show();
-                    return
+                    return;
                 }
 
                 let cked=CKEDITOR.instances['content'].getData();
@@ -81,7 +81,7 @@
         },
         error: function (message) {
             console.log('失败');
-            console.log(message)
+            console.log(message);
         }
     });
             });

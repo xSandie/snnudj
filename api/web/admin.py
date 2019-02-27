@@ -27,6 +27,8 @@ def create_admin():
     user_phone=req_args.get('userPhone')
     user_name=req_args.get('userName','')
     user_password=req_args.get('userPassword','')
+    user_canPub=req_args.get('canPub',False)
+    user_canEdit=req_args.get('canEdit',False)
 
     new_admin=User.query.filter_by(userPhone=user_phone).first()
     if new_admin is None:
@@ -38,18 +40,24 @@ def create_admin():
             # new_admin.username=user_name
             new_admin.admin=True
             new_admin.roleId=Roles.Moderator
+            new_admin.canPub = user_canPub
+            new_admin.canEdit = user_canEdit
     elif user_name=='':
         #未设置新名字
         with db.auto_commit():
             new_admin.admin = True
             new_admin.roleId = Roles.Moderator
             new_admin.password=user_password
+            new_admin.canPub = user_canPub
+            new_admin.canEdit = user_canEdit
     else:
         #未设置密码
         with db.auto_commit():
             new_admin.admin = True
             new_admin.roleId = Roles.Moderator
             new_admin.username = user_name
+            new_admin.canPub = user_canPub
+            new_admin.canEdit = user_canEdit
     return 'ok'
 
 

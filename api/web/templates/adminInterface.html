@@ -119,7 +119,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title font-weight-bold">创建管理员</h4>
-                        <form>
+                        <form id="createAdminForm">
                             <div class="alert alert-success" id="successhint">
                                 <strong>创建成功!</strong><a class="text-success" href="{{ url_for('web.see_all_admin') }}">点击刷新</a>
                             </div>
@@ -131,26 +131,31 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">姓名</span>
                                 </div>
-                                <input type="text" class="form-control" id="newName" placeholder="可不填">
+                                <input type="text" name="username" class="form-control" placeholder="可不填">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">手机号</span>
                                 </div>
-                                <input class="form-control" id="newPhone" placeholder="18349250473">
+                                <input name="account" class="form-control" placeholder="必填">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">密码</span>
                                 </div>
-                                <input class="form-control" id="newPassword" placeholder="********">
+                                <input name="password" class="form-control" placeholder="********">
                             </div>
-                            <!-- <div class="form-group">
-                                    <label for="pwd">密码:</label>
-                                    <input type="password" class="form-control" id="pwd">
-                                </div> -->
+                            <div class="checkbox">
+                                <label class="checkbox-inline">
+                                    <input name="canEdit" id="canEdit" type="checkbox" >文章权限
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input name="canPub" id="canPub" type="checkbox" >签到权限
+                                </label>
+                            </div>
 
-                            <div class="btnArea"><a class="btn btn-danger text-white" id="createAdmin">确认创建</a>
+                            <div class="btnArea">
+                                <a class="btn btn-danger text-white" id="createAdmin">确认创建</a>
                             </div>
                         </form>
 
@@ -291,16 +296,40 @@
                 });
             });
             $('#createAdmin').click(function () {
-                var userName=$('#newName').val();
-                var userPhone=$('#newPhone').val();
-                var userPassword=$('#newPassword').val();
-                if (userPhone==''){alert('至少填写手机号！');return;}
+                var data=$('#createAdminForm').serializeArray(); //序列化获得表单数据，结果为：user_id=12&user_name=John&user_age=20
+            for(var i = 0; i < data.length; i++){
+                var fitem = data[i];
+                if (fitem.name == 'account' && fitem.value == ""){
+                    alert('至少填写手机号！');return;
+                }
+                if (fitem.name == 'account') {
+                    var userPhone = fitem.value
+                }
+                if (fitem.name == 'username') {
+                    var userName = fitem.value
+                }
+                if (fitem.name == 'password') {
+                    var userPassword = fitem.value
+                }
+                if (fitem.name == 'canEdit' && fitem.value == "on"){
+                    data[i].value = true
+                    var canEdit = true
+                }
+                if (fitem.name == 'canPub' && fitem.value == "on"){
+                    data[i].value = true
+                    var canPub = true
+                }
+                console.log(fitem);
+            }
+            var sendData={
+                'userPhone':userPhone,
+                'userName':userName,
+                'userPassword':userPassword,
+                'canPub':canPub,
+                'canEdit':canEdit
+            };
+            console.log(sendData);
                 {#密码可不填，默认1-8#}
-                var sendData={
-                    'userPhone':userPhone,
-                    'userName':userName,
-                    'userPassword':userPassword
-                };
                 $.ajax({
                     type: "POST",
                     url: "{{ url_for('web.create_admin') }}",

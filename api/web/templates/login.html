@@ -13,6 +13,7 @@
     <script>$(document).ready(function(){
         // 页面加载完成就执行
         $("#hint").hide();
+        $("#deny").hide();
         console.log('执行默认操作');
         $("#login").click(function(e) {
             e.preventDefault();
@@ -38,7 +39,9 @@
                 console.log('enter ok')
         }if (message=='error'){
                 $('#hint').show();
-            }},
+            }else if (message == 'deny'){
+                $('#deny').show();
+            } },
         error: function (message) {
             {#console.log(message)#}
         }
@@ -101,7 +104,9 @@
                             <div id='hint' class="alert alert-danger">
                                 <strong>登陆失败!</strong> 请检查账号密码。
                             </div>
-
+                            <div id='deny' class="alert alert-danger">
+                                <strong>登陆失败!</strong> 无文章管理权限。
+                            </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">手机号</span>

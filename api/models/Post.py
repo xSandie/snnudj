@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, SmallInteger
 from sqlalchemy.orm import relationship
 
-from api.models.base import Base
+from api.models.base import Base, db
 
 
 class Post(Base):
@@ -11,6 +11,6 @@ class Post(Base):
     title=Column(String(60))
     body=Column(Text)
     time=Column(DateTime,default=datetime.now)
-    pubPersonId=Column(Integer,ForeignKey('user.userid'))
-    pubPerson=relationship('User',back_populates='posts')
+    pubPersonId=Column(Integer,db.ForeignKey('user.userid'))
+    pubPerson=db.relationship('User',back_populates='posts')
     status=Column(SmallInteger,default=1)

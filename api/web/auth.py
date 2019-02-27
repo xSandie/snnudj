@@ -22,17 +22,19 @@ def web_login():
     user=User.query.filter_by(userPhone=account).first()
     try:
         if user.admin and user.validate_password(password):
-            login_user(user,remember=True)
-            response = make_response('ok')
-
+            if user.canEdit:
+                login_user(user,remember=True)
+                response = make_response('ok')
+            else:
+                response = make_response('deny')
         else:
             response = make_response('error')
             # 以下为打开跨站响应的代码
-            response.headers['Access-Control-Allow-Origin'] = '*'
+            # response.headers['Access-Control-Allow-Origin'] = '*'
     except Exception as e:
         response = make_response('error')
         # 以下为打开跨站响应的代码
-        response.headers['Access-Control-Allow-Origin'] = '*'
+        # response.headers['Access-Control-Allow-Origin'] = '*'
 
     return response
 

@@ -3,14 +3,14 @@ from datetime import datetime
 from sqlalchemy import Column, BigInteger, ForeignKey, Integer, Time, String
 from sqlalchemy.orm import relationship
 
-from api.models.base import Base
+from api.models.base import Base, db
 
 
 class SignInPeople(Base):
     id = Column(Integer,autoincrement=True,primary_key=True)
 
-    signInOrderId=Column(Integer,ForeignKey('sign_in_order.id'))
-    signInOrder=relationship('SignInOrder',back_populates='signInPerson')
+    signInOrderId=Column(Integer,db.ForeignKey('sign_in_order.id'))
+    signInOrder=db.relationship('SignInOrder',back_populates='signInPerson')
 
     userId=Column(Integer,index=True,nullable=False)
     username = Column(String(20))
